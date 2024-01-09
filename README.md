@@ -11,3 +11,6 @@ need to edit chario3.asm to set the correct address's.
 
 Also the relocator will make a mess out of your jump address's so you need to
 encode them at data bytes.
+
+On linux use the build.sh script to creat the disk image file. Then use
+dd to copy to image to the CF card.
