@@ -285,6 +285,8 @@ DEV$DISPATCH:
 	;;;;; DEVICE 0 HANDLERS (SD SYSTEMS VIDIO BOARD)
 CINIT0:	; DEVICE 0 INITIALIZATION 
 
+	ret	; don't do this now
+
         LXI     H,SCCINIT
         MVI     C,0A1H
         MVI     B,0EH
@@ -339,41 +341,28 @@ KEYIN$MSG	DB	CR,LF,'In Keyin ','$'
 ;<<<<<<<<<<<<<<<<<<< MAIN CONSOL STATUS ROUTINE >>>>>>>>>>>>>>>>>>>>>>
 CIST0:				; DEVICE 0 INPUT STATUS:
 CSTS:
-	IN	KEYSTAT
-	ANI	01H
-	RZ			;RETURN WITH 0 IN [A] IF NOTHING THERE
-	MVI	A,0FFH
+	db	0c3h,26h,0f3h	; avoid relocator
 	RET			;RETURN WITH 0FFH IN [A] IF SOMETHING
+
 ;
 ;
 ;<<<<<<<<<<<<<<<<<<<< MAIN CONSOL INPUT ROUTINE >>>>>>>>>>>>>>>>>>>>
 ;
 CI0:				;DEVICE 0 INPUT:
 CI:
-	IN	KEYSTAT
-	ANI	01H
-	JZ	CI
-	IN	KEYIN
-	ANI	7FH
+	db	0c3h,03dh,0f3h	; avoid relocator
 	RET
 ;
 ;<<<<<<<<<<<<<<<<<<<<<< MAIN CONSOL OUTPUT ROUTINE >>>>>>>>>>>>>>>>>>>>>>>>>
 ;
 COST0:	; DEVICE 0 OUTPUT STATUS:
-	IN	CRTSTAT
-	ANI	4H
-	RZ
 	XRA	A
 	DCR	A
 	RET
 ;
 CO0:				; DEVICE 0 OUTPUT:
 CO:
-	IN	CRTSTAT
-	ANI	04H
-	JZ	CO
-	MOV	A,C
-	OUT	0A3H
+	db	0c3h,0cfh,0f2h
 	RET
 ;
 ;
